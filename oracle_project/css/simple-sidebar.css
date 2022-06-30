@@ -1,0 +1,20 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+ .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#fondo {
+    width: auto;
+    height: auto;
+    background-image: image("novias-vestidos-tendencias_524458690_161254376_1024x576.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
