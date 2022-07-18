@@ -5,23 +5,28 @@ session_start();
     $bdAbierta = AbrirBD();
 
   
-	$sql = 'BEGIN SELECT * FROM PERIFERICOS; END;';    
-    $fila = null;        
-        //Statement does not change
-        $stmt = oci_parse($bdAbierta,$sql);                     
+	$sql = 'BEGIN prd_get_trajes(:DATOS); END;';            
+
+								//Statement does not change
+								$stmt = oci_parse($bdAbierta,$sql);                     
 
 
-        //But BEFORE statement, Create your cursor
-        $cursor = oci_new_cursor($bdAbierta);
+								//But BEFORE statement, Create your cursor
+								$cursor = oci_new_cursor($bdAbierta);
 
-        // On your code add the latest parameter to bind the cursor resource to the Oracle argument
-        oci_bind_by_name($stmt,":DATOS", $cursor,-1,OCI_B_CURSOR);
+								// On your code add the latest parameter to bind the cursor resource to the Oracle argument
+								oci_bind_by_name($stmt,":DATOS", $cursor,-1,OCI_B_CURSOR);
 
-        // Execute the statement as in your first try
-        oci_execute($stmt);
+								// Execute the statement as in your first try
+								oci_execute($stmt);
 
-        // and now, execute the cursor
-        oci_execute($cursor);
+								// and now, execute the cursor
+								oci_execute($cursor);
+
+
+
+ 
+
 ?>
 
 <!DOCTYPE html>
@@ -37,8 +42,9 @@ session_start();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/carrito.js"></script>
+    <style>
 
-
+    </style>
 </head>
 
 <body>
@@ -89,13 +95,12 @@ session_start();
                         <a class="dropdown-item" href="logout.php" style="font-family:Sans-serif; font-size:16px;">Salir</a>
                    <?php
                        }else{
-                        print "";
                    ?>
 
                             <a class="dropdown-item" href="login.php" style="font-family:Sans-serif; font-size:16px;">Login</a>
                             <a class="dropdown-item" href="registrar.php" style="font-family:Sans-serif; font-size:16px;">Registro</a>
                    <?php
-                       }
+                       } 
                    ?>
                             
                         </div>
@@ -138,9 +143,7 @@ session_start();
                                 </div>
                             </li>
                     <?php
-                         }  }else{
-                            print "";
-                         }
+                         }  }
                      ?>
 
                      
@@ -159,37 +162,51 @@ session_start();
             </ul>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="images/RAM_PERI.webp" alt="Ram RGB" width="1100" height="450">
-                    <div class="carousel-caption" ">
-                        <h3 style="color: white;" >Ram GSKILL RGB</h3>
-                        <h4 style="color: white; font-weight: bold;" >$2,500.00</h4>
+                    <img src="imagenes/ram.jpg" alt="Ram RGB" width="1100" height="450">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="carousel-caption" style="color: black;">
+                        <h3>Ram RGB</h3>
+                        <p>$2,500.00</p>
                     </div>
                 </div>
-
                 <div class="carousel-item float-center">
-                    <img src="images/GRAFICA_PERI.png" alt="Tarjeta Gráfica 3090" width="1100" height="450">
-                    <div class="carousel-caption" style="color: white;" >
-                        <h3>Tarjeta Gráfica RX 6900</h3>
-                        <h4 style="font-weight: bold;" >$300.00</h4>
+                    <img src="imagenes/tajetagrafica.jpg" alt="Tarjeta Gráfica 3090" width="1100" height="450">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="carousel-caption"style="color: black;">
+                        <h3>Tarjeta Gráfica 3090</h3>
+                        <p>$300.00</p>
                     </div>
                 </div>
-
                 <div class="carousel-item img-fluid">
-                    <img src="images/ASUS_PERI.webp" alt="Tarjeta Madre Asus" width="1100" height="450">
-                    <div class="carousel-caption" style="color: white;" >
+                    <img src="imagenes/asus.jpg" alt="Tarjeta Madre Asus" width="1100" height="450">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="carousel-caption"style="color: black;">
                         <h3>Tarjeta Madre Asus</h3>
-                        <h4 style="font-weight: bold;">$1,600.00</h4>
+                        <p>$1,600.00</p>
                     </div>
                 </div>
-
                 <div class="carousel-item img-fluid">
-                    <img src="images/REFRIGERACION_PERI.webp" alt="Disipador RGB" width="1100" height="450">
-                    <div class="carousel-caption" style="color: white;">
-                        <h3>Refrigeracion Líquida RGB</h3>
-                        <h4 style="font-weight: bold; color: black;">$2,000.00</h4>
+                    <img src="imagenes/disipador.jpg" alt="Disipador RGB" width="1100" height="450">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="carousel-caption" style="color: black;">
+                        <h3>Disipador RGB</h3>
+                        <p>$2,000.00</p>
                     </div>
                 </div>
-
             </div>
             <a class="carousel-control-prev" href="#demo" data-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
@@ -203,26 +220,30 @@ session_start();
         <div class="row">
       
 <?php
-    while (($fila = oci_fetch_array($cursor, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
+
+
+
+
+while (($fila = oci_fetch_array($cursor, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
+
 
 ?>
-        <img src="<?=$fila['imagen'];?>" alt="prueba">
-            <!-- <div class="col-lg-4" style="border: black; border: ridge;">
-                <img class="img-fluid" src="<?=$fila['imagen'];?>" alt="Tarjeta Tráfica 3090" width="350" height="300">
-                <h5 class="font-weight-bold">Precio $<?=$fila['precio'];?></h5>
+
+            <div class="col-lg-4" style="border: black; border: ridge;">
+                <img class="img-fluid" src="<?=$fila['IMG_RUTA'];?>" alt="Tarjeta Tráfica 3090" width="350" height="300">
+                <h5 class="font-weight-bold">Precio $<?=$fila['PRECIO_UNIT'];?></h5>
                     <input type="button" id="botonAñadir " value="Añadir al Carrito " class="btn btn-dark ">
-                    <input type="button" id="botonAñadir " value="+" class="btn btn-success" 
-                        onclick="agregarAlcarrito(<?=$fila['id_articulo'];?>);"
-                    >
+                    <input type="button" id="botonAñadir " value="+" class="btn btn-success" onclick="agregarAlcarrito(<?=$fila['ID_ARTICULO'];?>);">
                      
-            </div> -->
+            </div>
 
-        <?php
-        }
+<?php
 
-        CerrarBD($bdAbierta);
 
-        ?>
+ }
+
+ CerrarBD($bdAbierta);
+?>
         </div>
     </div>
 </body>
