@@ -6,7 +6,7 @@ include 'conn/conexionBD.php';
 include 'usuario.php';
 include 'articulo.php';
 
-$subTotal = 0;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,16 +62,18 @@ $subTotal = 0;
                 
                  <a class="navbar-brand" href="perifericos.php" style="font-family:Sans-serif; font-size:20px;">Perifericos</a>
                 
-                 <li class="nav-item">
+                <li class="nav-item">
                     <div class="dropdown">
                         <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                             style="font-family:Sans-serif; font-size:20px;">
                             Servicios
                         </button>
                         <div class="dropdown-menu">
-                            
-                            <a class="dropdown-item" href="laptop_alquiler.php" style="font-family:Sans-serif; font-size:16px;">Alquiler de Equipos de Segunda</a>
-                            <a class="dropdown-item" href="comentario.php"
+                            <a class="dropdown-item" href="#"
+                                style="font-family:Sans-serif; font-size:16px;">Lavanderia</a>
+                            <a class="dropdown-item" href="#" style="font-family:Sans-serif; font-size:16px;">Alquiler</a>
+                            <a class="dropdown-item" href="#" style="font-family:Sans-serif; font-size:16px;">Asesoramiento</a>
+                            <a class="dropdown-item" href="comentario.html"
                                 style="font-family:Sans-serif; font-size:16px;">Comentarios</a>
                         </div>
                         <!-- <img src="imagenes/iconoInicio.png" alt="" width="35px" height="35px" class="float-right"> -->
@@ -106,19 +108,16 @@ $subTotal = 0;
                         </div>
 
                    <?php
-                     //   if(isset($_SESSION["usuario"])){
-                      //      if($_SESSION["rol"]==1){
+                    //    if(isset($_SESSION["usuario"])){
+                     //       if($_SESSION["rol"]==1){
                    ?>
                          <a class="navbar-brand" href="lista_carrito.php" style="font-family:Sans-serif; font-size:20px;">Carrito</a>
                    <?php
-                         //   }
-                      // } 
+                    //        }
+                    //   } 
                    ?>
 
-                   
-
                        
-                        <!-- <img src="imagenes/iconoInicio.png" alt="" width="35px" height="35px" class="float-right"> -->
                     </div>
                 </li>
 
@@ -131,10 +130,18 @@ $subTotal = 0;
 
     <div class="container">
 
+<?php 
+
+ if(isset($_SESSION['usuario'])){
+
+
+
+?>
+
+
+
         <div class="row">
 
-
-            
             <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -161,7 +168,7 @@ $subTotal = 0;
                       <div class="row">
                         <div class="  invoice-header">
                           <h1>
-                                          <i class="fa fa-globe"></i> Lista de articulos en el carrito<br>
+                                          <i class="fa fa-globe"></i>Pago de Articulos<br>
                                           
                                       </h1>
                         </div>
@@ -176,10 +183,7 @@ $subTotal = 0;
                           <address>
 
                           <?php
-
-                          if(isset($_SESSION['usuario'])){
-                             $cliente = unserialize($_SESSION['usuario']);
-                           
+                            $cliente = unserialize($_SESSION['usuario']);
 
                             ?>
                                           <strong><?=$cliente->getNombre()." ".$cliente->getApell1()." ".$cliente->getApell2();?></strong>
@@ -187,12 +191,7 @@ $subTotal = 0;
                                           <br><?=$cliente->getDir();?>
                                           <br>Phone: <?=$cliente->getTel();?>
                                           <br>Email: <?=$cliente->getCorreo();?>
-
-                          <?php
-                        }
-
-                          ?>                                          
-                                      </address>
+                        </address>
                         </div>
             
                         <!-- /.col -->
@@ -203,23 +202,16 @@ $subTotal = 0;
                       <div class="row">
                         <div class="  table">
                           <table class="table table-striped">
-
-                     
-                            <thead>
-                              <tr>
-                                <th>Qty</th>
-                               
-                                <th>Codigo #</th>
-                                <th style="width: 59%">Description</th>
-                                <th>Subtotal</th>
-                                <th>Accciones</th>
-                              </tr>
-                            </thead>
+ 
 
                             <tbody>
 
+ 
 
                                 <?php 
+
+
+
 
 
 
@@ -228,7 +220,7 @@ $subTotal = 0;
 
                                   $arrArticulos = $_SESSION['articulos'];
 
-                                 /* if($arrArticulos[0] == null){ 
+                                  if($arrArticulos[0] == null){ 
 
                                      
                                       $_SESSION['articulos'] = null;
@@ -236,37 +228,30 @@ $subTotal = 0;
                                       echo "<center><h1>El carrito esta vacio!</h1></center>";
 
                                     }
- */
+ 
         
 
                                  $contador = 0;
                                  $subTotal = 0;
 
 
-
-                           if(is_countable($arrArticulos)){
+ 
+           if(is_countable($arrArticulos)){
                                  for($x=0;$x<sizeof($arrArticulos);$x++){
-             // if($arrArticulos[$x]!= null) {                  
+               if($arrArticulos[$x]!= null) {                  
                                   $precioUnit = 0;
                                   $desc = "";
-                                   
-                                  if($arrArticulos[$x] == null){// borra elementos obsoletos, en null
-                                     unset($arrArticulos[$x]);
-                                  }else{
+                                  
                                   $ar  = unserialize($arrArticulos[$x]);
-
-
-
                                   //-----------------buscar el precio y descripcion del articulo
 
                                   $bdAbierta = AbrirBD();
-
-                        
+								  
 								$sql = 'BEGIN prd_get_detalle_precio_articulo('.$ar->getId_articulo().',:DATOS); END;';            
 
 								//Statement does not change
 								$stmt = oci_parse($bdAbierta,$sql);                     
-								//oci_bind_by_name($stmt,':PIDARTIC',$ar->getId_articulo());           
+								//oci_bind_by_name($stmt,':PIDARTICULO',$ar->getId_articulo());           
 								   
 								   
 
@@ -283,12 +268,13 @@ $subTotal = 0;
 								oci_execute($cursor);
 
 
+
 								while (($fila = oci_fetch_array($cursor, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
-	
-                               
+
 
                                     //$precioUnit =  $fila['PRECIO_UNIT']*$ar->getCantidad();
                                     $precioUnit =  str_replace(",",".",$fila['PRECIO_UNIT'])*$ar->getCantidad();
+                                    
                                     $desc       =  $fila['DESCRIPCION'];
 
 
@@ -297,34 +283,15 @@ $subTotal = 0;
                                  
                                   CerrarBD($bdAbierta);
 
-                                  //------------------------------------
-                                    ?>
-                                
-                                      <tr>
-                                        <th><?=$ar->getCantidad();?></th>
-                                        
-                                        <th><?=$ar->getId_articulo();?></th>
-                                        <th style="width: 59%"><?=$desc;?></th>
-                                        <th><?=$precioUnit;?></th>
-
-                                        <th>
-
-                                        <input type="button" id="botonAñadir " value="+" class="btn btn-success" onclick="agregarAlcarrito(<?=$ar->getId_articulo();?>);">
-                                          <input type="button" id="botonAñadir " value="-" class="btn btn-secondary" onclick="sacarAlcarrito(<?=$ar->getId_articulo();?>);">
-
-                                        </th>        
-
-                                      </tr>
-                               
-                                    <?php 
-                                   } 
+                             
+                                  }   
                                 }
  
      
-}else{
+				}else{
 
 
-}
+				}
                                     ?>
 
 
@@ -363,6 +330,9 @@ $subTotal = 0;
                             </table>
                           </div>
                         </div>
+
+
+
                         <?php
                       }else{
 
@@ -382,7 +352,35 @@ $subTotal = 0;
                          if($subTotal>0){
 
                          ?>
-                          <button class="btn btn-success pull-right" onclick="AreaPago();"><i class="fa fa-credit-card"></i>Pagar</button>
+
+
+                         <form action="generarPago.php" method="post">
+
+                         <table>
+
+                         <tr>
+                                <td>Seleccione el tipo de tarjeta</td>
+                                <td>
+                                     <select name="tipo_tarjeta">
+                                        <option value="1">Visa</option>
+                                        <option value="2">MasterCard</option>
+                                        <option value="3">american-express</option>
+                                     </select>
+
+                                </td>
+                         </tr>
+                         <tr>
+                                <td> Ingrese numero de tarjeta </td>
+                                <td><input type="text" name="numTarjeta" id="" maxlength="16" minlength="16"><br></td>
+                         </tr>                         
+                         </table>  
+                          
+
+
+                        
+                         <br>
+                          <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i>Pagar</button>
+                      </form>
                           <?php
 
                          }
@@ -390,11 +388,19 @@ $subTotal = 0;
                          ?>
                         </div>
                       </div>
+
                     </section>
                   </div>
                 </div>
               </div>
         </div>
+
+        <?php
+             }else{
+                echo "<h1>Debe estar logeado para realizar el pago</h1>";
+             }
+
+        ?>
     </div>
 
  
